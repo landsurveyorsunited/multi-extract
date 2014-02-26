@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html ng-app="multiextract">
+<head>
+	<title>import&bull;io multi-extract</title>
+	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+</head>
+<body ng-controller="Page">
+
+	<div class="container" style="width: 100%">
+
+		<h1>Multiple extractors for the same page</h1>
+		<p>This page shows you how to combine multiple import&bull;io extractors over the API to get data from multiple parts of the same page at the same time.</p>
+
+		<form role="form" class="well col-md-6" ng-submit="getData()">
+			<div class="form-group">
+				<label for="userGuid">Your import&bull;io User GUID</label>
+				<input type="text" class="form-control" id="userGuid" ng-model="userGuid" placeholder="User GUID">
+				<span class="help-block">You can get this from your <a href="http://import.io/data/account" target="_blank">account page</a></span>
+			</div>
+			<div class="form-group">
+				<label for="apiKey">Your import&bull;io API key</label>
+				<input type="text" class="form-control" id="apiKey" ng-model="apiKey" placeholder="API key">
+				<span class="help-block">You can get this from your <a href="http://import.io/data/account" target="_blank">account page</a></span>
+			</div>
+			<div class="form-group">
+				<label for="sourceGuids">Extractor data source GUIDs</label>
+				<textarea class="form-control" id="sourceGuids" ng-model="sourceGuids" placeholder="Source GUIDs"></textarea>
+				<span class="help-block">Enter multiple extractor GUIDs. You can get these from your <a href="http://import.io/data/mine" target="_blank">My Data page</a>, this example will get you started</span>
+			</div>
+			<div class="form-group">
+				<label for="targetUrl">Web page URL</label>
+				<input type="text" class="form-control" id="targetUrl" ng-model="targetUrl" placeholder="API key">
+				<span class="help-block">This is the URL the extractors will be run against, this example will get you started</span>
+			</div>
+			<button type="submit" class="btn btn-primary" ng-disabled="!formSubmitEnabled()">{{formLoading && 'Loading data' || 'Go'}}</button>
+		</form>
+
+		<div ng-show="sources.length" class="col-md-12">
+			<h2>The Data</h2>
+			<p>For each of the extractor GUIDs you listed, these tables show the results of querying that extractor with the URL you provided above.</p>
+
+			<div ng-repeat="source in sources">
+				<h4>Source: <a href="http://import.io/data/mine/?id={{source.guid}}" target="_blank">{{source.name}}</a></h4>
+
+				<table class="table">
+					<thead>
+						<tr>
+							<th ng-repeat="col in getColumns(source.guid)">{{col}}</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="row in results[source.guid]">
+							<td style="max-width: 200px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;" ng-repeat="col in getColumns(source.guid)">{{row[col]}}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
+		</div>
+
+	</div>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.13/angular.min.js"></script>
+	<script src="importio.js"></script>
+	<script src="app.js"></script>
+	<script src="controller.js"></script>
+	<script src="safeApply.js"></script>
+</body>
+</html>
