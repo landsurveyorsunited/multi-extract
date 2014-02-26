@@ -47,7 +47,7 @@ c.controller("Page", ["$scope", "safeApply", "ioconfig", "ioquery", "ioapi",
 		if (!$scope.columns.hasOwnProperty(guid)) {
 			return [];
 		}
-		return Object.keys($scope.columns[guid]);
+		return Object.keys($scope.columns[guid]).sort();
 	}
 
 	// Gets the data when the form is submitted
